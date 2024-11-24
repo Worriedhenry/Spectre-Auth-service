@@ -8,59 +8,60 @@ const userSchema = new Schema({
         required: [true, 'Please add username'],
         unique: [true, 'Username already exists']
     },
-    fullname:{
+    fullname: {
         type: String,
 
-     },
+    },
     email: {
         type: String,
         required: [true, 'Please add an email'],
         unique: [true, 'Email already exists']
     },
-    phone:{
-        type:Number,
+    phone: {
+        type: Number,
         // required: [true, 'Please add a phone number'],
         min: 10,
         unique: [true, 'Phone number already exists']
-        
+
     },
     password: {
         type: String,
         // required: [true, 'Please add a password']
     },
-    about:{
+    about: {
         type: String,
         default: "Hey, I am using Tailwind+React"
     },
     role: {
         type: String,
-        default: "user"
+        enum: ['admin', 'editor', 'user'],
+        default: 'user',
     },
     location: {
-        type:Array,
-        default:[null,null,null,null,null]
+        type: Array,
+        default: [null, null, null, null, null]
     },
-    services:{
-        type:Array,
+    services: {
+        type: Array,
         ref: 'services',
         default: []
     },
-    reviews:{
-        type:Array,
+    reviews: {
+        type: Array,
         default: []
     },
-    tasks:[
+    tasks: [
         {
             type: Schema.Types.ObjectId,
             ref: 'task',
             default: []
         }
     ],
-    proposals:[
+    proposals: [
         {
             type: Schema.Types.ObjectId,
-            ref:'task',
-            default:[]
+            ref: 'task',
+            default: []
         }],
     googleLogin: {
         type: Boolean,
@@ -99,19 +100,19 @@ const userSchema = new Schema({
         type: Array,
         default: []
     },
-    socials:{
+    socials: {
         type: Array,
         default: []
     },
-    personalSite:{
+    personalSite: {
         type: String,
         default: ""
     },
-    workHistory:{
+    workHistory: {
         type: Array,
         default: []
     },
-    skills:{
+    skills: {
         type: Array,
         default: []
     },
@@ -123,10 +124,25 @@ const userSchema = new Schema({
         type: Number,
         default: 0
     },
-    chatRooms:{
+    chatRooms: {
         type: Array,
         default: [],
         ref: 'serviceProposal'
+    },
+
+    banned: {
+        type: Boolean,
+        default: false
+    },
+    bannedByAdmin: {
+        type: Schema.Types.ObjectId,
+        ref: 'Users',
+        default: null
+    },
+    reasonOfban:{
+        type: String,
+        default: 'Reason not provided or User is not banned'
+
     }
 }, { timestamps: true })
 

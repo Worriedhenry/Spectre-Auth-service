@@ -44,7 +44,7 @@ app.post('/auth/loginviaform', [
     const { email, password } = req.body;
     // console.log(email,password)
     try {
-        let user = await User.findOne({ email },{profilePic:1,username:1,password:1,email:1});
+        let user = await User.findOne({ email },{profilePic:1,username:1,password:1,email:1,role:1});
         if (!user) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
@@ -56,10 +56,12 @@ app.post('/auth/loginviaform', [
         const payload = {
             id: user.id
         }
+        // console.log(user.role,"59")  
         const userInfo={
             profilePic:user.profilePic,
             username:user.username,
-            userId:user._id
+            userId:user._id,
+            role:user.role
         }
         const {profilePic,username}=user
         jwt.sign(payload, process.env.JWT_SECRET , {
@@ -190,12 +192,12 @@ app.get("/auth/checktoken/:token",async (req, res) => {
     } 
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user=await User.findOne({ _id: decoded.id },{email:1,username:1,profilePic:1});
+        const user=await User.findOne({ _id: decoded.id },{email:1,username:1,profilePic:1,role:1});
         if(!user){
             return res.status(401).json({ msg: "No token, authorization denied" });
         }
-        const {email,username,profilePic}=user
-        return res.status(200).json({email,username,profilePic,userId:decoded.id});  
+        const {email,username,profilePic,role}=user
+        return res.status(200).json({email,username,profilePic,userId:decoded.id,role});  
     }
     catch(err){
         console.log(err)
